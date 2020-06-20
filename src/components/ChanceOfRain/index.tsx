@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
     color: '#fefefe',
     fontSize: 20,
     alignSelf: 'flex-start',
-    marginBottom: 10
+    marginBottom: 10,
+    marginLeft: 10,
   },
   label: {
     fontSize: 15,

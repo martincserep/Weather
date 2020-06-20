@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, ScrollView } from 'react-native';
 import ChanceOfRain from '../../components/ChanceOfRain';
+import HourlyForecast from '../../components/HourlyForecast';
 
 
 export default function Home() {
@@ -10,7 +11,7 @@ export default function Home() {
 
       </View>
       <View style={styles.hourlyWeatherContainer}>
-
+        <HourlyForecast />
       </View>
       <View style={styles.chanceOfRainContainer}>
         <ChanceOfRain />
@@ -30,7 +31,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   hourlyWeatherContainer: {
-    height: '30%',
+    height: '35%',
   },
   chanceOfRainContainer: {
     height: '30%',

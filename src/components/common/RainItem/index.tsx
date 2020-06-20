@@ -33,12 +33,10 @@ const styles = StyleSheet.create({
   },
   idle: {
     height: `${percent}%`,
-    // height: `0%`,
     width: '100%',
   },
   rainChance: {
     height: `${100-(percent)}%`,
-    // height: `100%`,
     width: '100%',
     borderRadius: 1000,
   },
