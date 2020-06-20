@@ -1,14 +1,20 @@
 import React from 'react';
-import { StyleSheet, SafeAreaView, StatusBar } from 'react-native';
-import Home from './src/screens/Home';
+import { StyleSheet, Text, View, SafeAreaView, StatusBar, ScrollView } from 'react-native';
 
 
-export default function App() {
+export default function Home() {
   return (
-    <SafeAreaView style={styles.container}>
-      <StatusBar barStyle='light-content' backgroundColor='#000839' />
-      <Home />
-    </SafeAreaView>
+    <View style={styles.container}>
+      <View style={styles.currentWeatherContainer}>
+
+      </View>
+      <View style={styles.hourlyWeatherContainer}>
+
+      </View>
+      <View style={styles.chanceOfRainContainer}>
+
+      </View>
+    </View>
   );
 }
 
