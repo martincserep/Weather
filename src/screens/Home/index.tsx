@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, Text, View, SafeAreaView, StatusBar, ScrollView } from 'react-native';
+import ChanceOfRain from '../../components/ChanceOfRain';
 
 
 export default function Home() {
@@ -12,7 +13,7 @@ export default function Home() {
 
       </View>
       <View style={styles.chanceOfRainContainer}>
-
+        <ChanceOfRain />
       </View>
     </View>
   );
