@@ -13,12 +13,12 @@ export default function ChanceOfRain() {
           <Text style={styles.label}>heavy rain</Text>
         </View>
         <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
-          <RainItem hour={2} active={false} />
-          <RainItem hour={4} active={true} />
-          <RainItem hour={6} active={false} />
-          <RainItem hour={8} active={false} />
-          <RainItem hour={10} active={false} />
-          <RainItem hour={12} active={false} />
+          <RainItem active={false} hour={2} period={'AM'} />
+          <RainItem active={true} hour={4} period={'AM'} />
+          <RainItem active={false} hour={6} period={'AM'} />
+          <RainItem active={false} hour={8} period={'AM'} />
+          <RainItem active={false} hour={10} period={'AM'}/>
+          <RainItem active={false} hour={12} period={'AM'} />
         </ScrollView>
       </View>
     </View>
@@ -48,11 +48,12 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: '#fefefe',
     fontWeight: '200',
-    marginVertical: 15,
+    // marginVertical: 15,
   },
   infoContainer: {
     flexDirection: 'column',
     alignContent: 'space-between',
-    height: '100%'
+    justifyContent: 'space-between',
+    height: '80%'
   }
 });
