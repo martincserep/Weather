@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, PixelRatio } from 'react-native';
 // import { Fontisto } from '@expo/vector-icons';
+import Icon from 'react-native-vector-icons/Fontisto';
 import { Current } from '../../models/Current';
 import Moment from 'moment';
 
@@ -14,7 +15,7 @@ const CurrentWeather = ({ data }: Props) => {
     <View style={styles.container}>
       <View style={styles.dayContainer}>
         <View style={styles.iconContainer}>
-          {/* <Fontisto name="rain" size={60} color="#00a8cc" /> */}
+          <Icon style={styles.icon} size={50} name={`${data.icon}`} color="#00a8cc" />
         </View>
         <View style={styles.dayTextContainer}>
           <Text style={styles.todayText}>
@@ -42,7 +43,7 @@ const CurrentWeather = ({ data }: Props) => {
         <Text style={styles.smallText}>
           Feels like {data.feelsLike}
         </Text>
-        {/* <Fontisto style={styles.dot} name="genderless" size={20} color="#fefefe" /> */}
+        <Icon style={styles.dot} name="genderless" size={20} color="#fefefe" />
         <Text style={styles.smallText}>
           Sunset {data.sunset}
         </Text>
@@ -72,6 +73,13 @@ const styles = StyleSheet.create({
   },
   iconContainer: {
     width: '40%',
+    alignContent: 'space-around',
+    alignSelf: 'center',
+    justifyContent: 'space-around',
+  },
+  icon: {
+    justifyContent: 'space-around',
+    alignSelf: 'center',
   },
   dayTextContainer: {
     width: '60%',
@@ -96,11 +104,14 @@ const styles = StyleSheet.create({
   currentTemperature: {
     color: '#fefefe',
     fontSize: 50,
-    alignSelf: 'baseline'
+    justifyContent: 'flex-start',
+    alignSelf: 'flex-start',
   },
   temperatureUnit: {
     color: '#fefefe',
-    fontSize: 20
+    fontSize: 20,
+    justifyContent: 'flex-start',
+    alignSelf: 'flex-start',
   },
   infoContainer: {
     flex: 1,

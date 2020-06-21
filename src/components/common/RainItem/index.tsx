@@ -1,19 +1,21 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
+let percent = 10;
 interface Props {
     hour: number;
     period: string;
     active: boolean;
+    percentage: number;
   }
-const percent = 0;
- const RainItem = ({ hour, active, period }: Props) => {
+ const RainItem = ({ hour, active, period, percentage }: Props) => {
+   percent = percentage;
   return (
     <View style={styles.container}>
-      <View style={styles.idle}>
+      <View style={[{height: `${100-(percent)}%`},styles.idle]}>
         <Text> </Text>
       </View>
-      <View style={[styles.rainChance, active ? styles.activeBar : styles.bar]}>
+      <View style={[{height: `${percent}%`}, styles.rainChance, active ? styles.activeBar : styles.bar]}>
       <Text> </Text>
       </View>
         <Text style={styles.label}>{hour}{period}</Text>
@@ -32,11 +34,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
   },
   idle: {
-    height: `${percent}%`,
     width: '100%',
   },
   rainChance: {
-    height: `${100-(percent)}%`,
+    
     width: '100%',
     borderRadius: 1000,
   },

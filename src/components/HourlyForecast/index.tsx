@@ -1,21 +1,25 @@
 import React from 'react';
 import { StyleSheet, Text, View, ScrollView } from 'react-native';
 import HourItem from '../common/HourItem';
+import { HourItemModel } from 'src/models/HourItemModel';
 
-export default function HourlyForecast() {
+interface Props {
+  data: Array<HourItemModel>
+}
+const HourlyForecast = ({ data }: Props) => {
+  const hours = data.map(current => {
+    return <HourItem isActive={current.isActive} time={current.time} period={'AM'} weather={current.icon} temperature={current.temperature} temperatureUnit={current.temperatureUnit} />
+  })
   return (
     <View style={styles.container}>
       <ScrollView showsHorizontalScrollIndicator={false} horizontal={true}>
-        <HourItem time={2} period={'AM'} weather={'rain'} temperature={20} temperatureUnit={'°C'} />
-        <HourItem time={4} period={'AM'} weather={'rain'} temperature={20} temperatureUnit={'°C'} />
-        <HourItem time={6} period={'AM'} weather={'rain'} temperature={19} temperatureUnit={'°C'} />
-        <HourItem time={8} period={'AM'} weather={'rain'} temperature={19} temperatureUnit={'°C'} />
-        <HourItem time={10} period={'AM'} weather={'rain'} temperature={18} temperatureUnit={'°C'} />
-        <HourItem time={12} period={'AM'} weather={'rain'} temperature={17} temperatureUnit={'°C'} />
+        {hours}
       </ScrollView>
     </View>
   );
 }
+
+export default HourlyForecast;
 
 const styles = StyleSheet.create({
   container: {
