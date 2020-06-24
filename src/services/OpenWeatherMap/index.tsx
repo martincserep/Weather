@@ -1,7 +1,4 @@
-import Client from './Client';
-import WeatherConditionCode from './WeatherConditionCode';
+import Client from "./Client";
+import WeatherConditionCode from "./WeatherConditionCode";
 
-export {
-  Client,
-  WeatherConditionCode
-}
+export { Client, WeatherConditionCode };

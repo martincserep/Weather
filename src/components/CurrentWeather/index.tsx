@@ -1,28 +1,42 @@
 import React from 'react';
 import { StyleSheet, Text, View, PixelRatio } from 'react-native';
 // import { Fontisto } from '@expo/vector-icons';
-import Icon from 'react-native-vector-icons/Fontisto';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import { Current } from '../../models/Current';
-import Moment from 'moment';
+import { fromUnixTime, format, toDate, parseISO } from 'date-fns';
+import { IconModel } from '../../models/IconModel/index';
 
 interface Props {
     data: Current,
 }
 const CurrentWeather = ({ data }: Props) => {
+  const tempIcon = new IconModel(false,'day-cloudy')
+  // const isIcon = data.icon.isIcon
   var currentDate = Date.now()
-  Moment.locale('en');
+
+  const sunsetRaw = fromUnixTime(data.sunset)
+  const sunset = toDate(sunsetRaw)
+  // console.error(sunset)
+  // console.error(format(Date.now(), 'yyyy-LL-dd')); // 2019-08-23
+
+  
+  // console.error(sunset)
   return (
     <View style={styles.container}>
       <View style={styles.dayContainer}>
         <View style={styles.iconContainer}>
-          <Icon style={styles.icon} size={50} name={`${data.icon}`} color="#00a8cc" />
+
+          {tempIcon.isIcon ? <Icon style={styles.icon} size={48} name={`${tempIcon.name}`} color="#00a8cc" />
+          : <Fontisto style={styles.icon} size={48} name={`${tempIcon.name}`} color="#00a8cc" />}
         </View>
         <View style={styles.dayTextContainer}>
           <Text style={styles.todayText}>
             Today
           </Text>
           <Text style={styles.smallText}>
-            {Moment(currentDate).format('ddd, D MMM')}
+            {/* {format(Date.now(),'ddd, d MMM')} */}
+            {/* {format(sunset,'ddd, d MMM')} */}
           </Text>
         </View>
       </View>
@@ -43,9 +57,9 @@ const CurrentWeather = ({ data }: Props) => {
         <Text style={styles.smallText}>
           Feels like {data.feelsLike}
         </Text>
-        <Icon style={styles.dot} name="genderless" size={20} color="#fefefe" />
+        <Fontisto style={styles.dot} name="genderless" size={20} color="#fefefe" />
         <Text style={styles.smallText}>
-          Sunset {data.sunset}
+          {/* Sunset {format(sunset,'HH:mm')} */}
         </Text>
       </View>
     </View>
