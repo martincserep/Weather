@@ -8,7 +8,7 @@ interface Props {
 }
 const HourlyForecast = ({ data }: Props) => {
   const hours = data.map(current => {
-    return <HourItem isActive={current.isActive} time={current.time} period={'AM'} weather={current.icon} temperature={current.temperature} temperatureUnit={current.temperatureUnit} />
+    return <HourItem time={current.time} weather={current.icon} temperature={current.temperature} temperatureUnit={current.temperatureUnit} />
   })
   return (
     <View style={styles.container}>

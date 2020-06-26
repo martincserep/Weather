@@ -1,42 +1,36 @@
 import React from 'react';
 import { StyleSheet, Text, View, PixelRatio } from 'react-native';
-// import { Fontisto } from '@expo/vector-icons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import { Current } from '../../models/Current';
-import { fromUnixTime, format, toDate, parseISO } from 'date-fns';
-import { IconModel } from '../../models/IconModel/index';
+import Moment from 'moment';
 
 interface Props {
     data: Current,
 }
 const CurrentWeather = ({ data }: Props) => {
-  const tempIcon = new IconModel(false,'day-cloudy')
-  // const isIcon = data.icon.isIcon
-  var currentDate = Date.now()
+  Moment.locale('hu');
+  const currentDate = Moment.now();
+  const sunsetRaw = Moment.unix(data.sunset);
+  const sunset = Moment(sunsetRaw).format('HH:mm');
 
-  const sunsetRaw = fromUnixTime(data.sunset)
-  const sunset = toDate(sunsetRaw)
-  // console.error(sunset)
-  // console.error(format(Date.now(), 'yyyy-LL-dd')); // 2019-08-23
-
-  
-  // console.error(sunset)
   return (
     <View style={styles.container}>
       <View style={styles.dayContainer}>
         <View style={styles.iconContainer}>
-
-          {tempIcon.isIcon ? <Icon style={styles.icon} size={48} name={`${tempIcon.name}`} color="#00a8cc" />
-          : <Fontisto style={styles.icon} size={48} name={`${tempIcon.name}`} color="#00a8cc" />}
+{/*     
+          {data.icon.isIcon ?
+          <Icon style={styles.icon} size={50} name={`${data.icon.name}`} color="#00a8cc" />
+        : <Fontisto style={styles.icon} size={50} name={`${data.icon.name}`} color="#00a8cc" /> }
+          */}
+          
         </View>
         <View style={styles.dayTextContainer}>
           <Text style={styles.todayText}>
             Today
           </Text>
           <Text style={styles.smallText}>
-            {/* {format(Date.now(),'ddd, d MMM')} */}
-            {/* {format(sunset,'ddd, d MMM')} */}
+            {Moment(currentDate).format('ddd, D MMM')}
           </Text>
         </View>
       </View>
@@ -59,7 +53,7 @@ const CurrentWeather = ({ data }: Props) => {
         </Text>
         <Fontisto style={styles.dot} name="genderless" size={20} color="#fefefe" />
         <Text style={styles.smallText}>
-          {/* Sunset {format(sunset,'HH:mm')} */}
+          Sunset {sunset}
         </Text>
       </View>
     </View>

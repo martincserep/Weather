@@ -96,6 +96,7 @@ export default class WeatherConditionText {
 
       // Clear
       case WeatherConditionCode.CLEAR:
+        console.log('lofasz')
         return "clear";
 
       // Clouds
@@ -145,6 +146,9 @@ export default class WeatherConditionText {
         return "violent storm";
       case WeatherConditionCode.WIND_HURRICANE:
         return "huricane";
+      default:
+          console.log('lofasz')
+          return "clear";
     }
   }
 }

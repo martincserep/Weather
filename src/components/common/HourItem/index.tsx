@@ -2,21 +2,41 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import Icon from 'react-native-vector-icons/Fontisto';
 
+import Moment from 'moment'
+
 interface Props {
-    time: number,
-    period: string,
+    time: string,
     weather: string,
     temperature: number,
     temperatureUnit: string,
-    isActive: boolean
 }
 
-const HourItem = ({ time, period, weather, temperature, temperatureUnit, isActive }: Props) => {
+const HourItem = ({ time, weather, temperature, temperatureUnit }: Props) => {
+  Moment.locale('hu')
+  let isActive = false;
+  let timeToCalculate = parseInt(Moment(time).format('hh'))
+  let currentHour = Moment.now();
+  let currentDay = Moment(currentHour).format('MM-DD')
+  currentHour = parseInt(Moment(currentHour).format('hh'))
+  let displayDayRaw = Moment.utc(time)
+  let displayDay = Moment(displayDayRaw).format('MM-DD')
+  let hourRaw = Moment.utc(time)
+  
+  
+  if (timeToCalculate <= currentHour && currentHour < (timeToCalculate + 3) && currentDay == displayDay) {
+    isActive = true;
+  } else {
+    isActive = false;
+  }
+    
   return (
     <View style={isActive ? activeStyles.container : styles.container}>
       <View style={isActive ? activeStyles.hourContainer : styles.hourContainer}>
+        <Text style={isActive ? activeStyles.hour : styles.hour}>
+            {Moment(displayDayRaw).format('ddd, DD')}
+          </Text>
           <Text style={isActive ? activeStyles.hour : styles.hour}>
-            {time}{period}
+            {Moment(hourRaw).format('HH:mm')}
           </Text>
       </View>
       <View style={isActive ? activeStyles.iconContainer : styles.iconContainer}>

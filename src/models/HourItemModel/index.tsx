@@ -1,12 +1,10 @@
 export class HourItemModel {
-    isActive: boolean;
-    time: number;
+    time: string;
     icon: string;
     temperature: number;
     temperatureUnit: string;
 
-    constructor(isActive: boolean, time: number, icon: string, temperature: number, temperatureUnit: string){
-        this.isActive = isActive;
+    constructor(time: string, icon: string, temperature: number, temperatureUnit: string){
         this.time = time;
         this.icon = icon;
         this.temperature = temperature;

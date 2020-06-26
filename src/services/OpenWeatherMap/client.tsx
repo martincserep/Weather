@@ -49,6 +49,18 @@ export default class Client {
       throw error;
     }
   }
+  async getHours({
+    city = "Hajdúböszörmény",
+    countryCode = null,
+    units = this.defaultUnits,
+  }) {
+    let params = new Params(city, this.apiKey, units);
+    try {
+      return await this.fetch("forecast", params);
+    } catch (error) {
+      throw error;
+    }
+  }
 
   async fetch(url: string, params: Params) {
     try {

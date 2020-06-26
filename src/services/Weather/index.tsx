@@ -3,6 +3,7 @@ import { Client } from '../OpenWeatherMap';
 import TemperatureUnit from '../../utils/TemperatureUnit';
 import env from '../../../env';
 import { CurrentModel } from './CurrentModel';
+import { HourlyRootModel } from './HourlyRootModel';
 
 export default class Weather {
   static temperature(temperature: any) {
@@ -36,12 +37,29 @@ export default class Weather {
             data = new CurrentModel(data)
             
            
-        await this.storage.setCurrent(data);
+        await this.storage.setCurrent('CURRENT',data);
 
-      console.log('🔥 FROM API');
+      console.log('CURRENT IS 🔥 FROM API');
       return data;
     } catch (error) {
       throw error;
     }
   }
+
+  async getHours({ city = 'Budapest', countryCode = 'Hu', unit = this.defaultUnit, force = false}) {
+    try {
+          let data = await this.client.getHours({ city });
+         
+          data = new HourlyRootModel(data)
+          
+         
+      await this.storage.setCurrent('HOURS',data);
+
+    console.log('HOURS IS 🔥 FROM API');
+
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
 }

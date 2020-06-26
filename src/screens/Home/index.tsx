@@ -23,6 +23,7 @@ import { WeatherConditionCode } from "src/services/OpenWeatherMap";
 import WeatherConditionIcon from "../../services/Weather/WeatherConditionIcon";
 import WeatherConditionText from "../../services/Weather/WeatherConditionText";
 import { IconModel } from "../../models/IconModel/index";
+import { HourlyRootModel } from "src/services/Weather/HourlyRootModel";
 
 export default class Home extends Component {
   weather: any;
@@ -32,6 +33,7 @@ export default class Home extends Component {
 
     this.state = {
       currentWeather: Current,
+      hourlyWeather: Array<HourItemModel>(),
       city: "Hajdúböszörmény",
       countryCode: "Hu",
       temperature: 0,
@@ -45,6 +47,14 @@ export default class Home extends Component {
   }
 
   async componentDidMount() {
+    const hourlyForecastData = [
+      new HourItemModel('2020-06-26 15:00:00', "night-alt-cloudy", 15, "°C"),
+      new HourItemModel('2020-06-26 18:00:00', "night-alt-cloudy", 15, "°C"),
+      new HourItemModel('2020-06-26 21:00:00', "night-alt-cloudy", 15, "°C"),
+      new HourItemModel('2020-06-27 00:00:00', "rain", 14, "°C"),
+      new HourItemModel('2020-06-27 03:00:00', "rain", 14, "°C"),
+      new HourItemModel('2020-06-27 06:00:00', "day-sunny", 15, "°C"),
+    ];
     this.setState({
       currentWeather: new Current(
         20,
@@ -55,10 +65,12 @@ export default class Home extends Component {
         1592764535,
         new IconModel(false, "sun")
       ),
+      hourlyWeather: hourlyForecastData,
     });
     try {
       // await this.fetchPreviouslyStoredData();
       this.fetchData();
+
     } catch (error) {
       Alert.alert(error.message);
     }
@@ -80,24 +92,28 @@ export default class Home extends Component {
   } = {}) {
     try {
       let data = await this.weather.getCurrent({ city, unit });
+      let hourData:HourlyRootModel = await this.weather.getHours({ city, unit })
       if (!updateState) {
         return data;
       }
-
+      let hours = hourData.list.map(current => {
+        return new HourItemModel(current.dt_txt,'sun',parseFloat(current.main.temp.toFixed(0)),'°C')
+      })
       this.setState({ temperatureUnit: unit });
+      this.setState({ hourlyWeather: hours})
       this.updateStateWithWeatherData(data);
     } catch (error) {
       throw error;
     }
   }
-  // data.sys.sunset
 
   updateStateWithWeatherData(data: CurrentModel) {
     const rawIcon: IconModel = WeatherConditionIcon.getForCode(
       data.weather.id,
       false
     );
-    const icon = new IconModel(rawIcon.isIcon, rawIcon.name);
+    // const icon = new IconModel(rawIcon.isIcon, rawIcon.name);
+    const icon = new IconModel(false, 'sun');
     // console.error(icon.name)
     const newWeatherData = new Current(
       parseFloat(data.main.temp.toFixed(1)),
@@ -138,21 +154,14 @@ export default class Home extends Component {
       new RainItemModel(false, 100, 10),
       new RainItemModel(false, 20, 12),
     ];
-    const hourlyForecastData = [
-      new HourItemModel(false, 2, "night-alt-cloudy", 15, "°C"),
-      new HourItemModel(true, 4, "night-alt-cloudy", 15, "°C"),
-      new HourItemModel(false, 6, "night-alt-cloudy", 15, "°C"),
-      new HourItemModel(false, 8, "rain", 14, "°C"),
-      new HourItemModel(false, 10, "rain", 14, "°C"),
-      new HourItemModel(false, 12, "day-sunny", 15, "°C"),
-    ];
+    
     return (
       <View style={styles.container}>
         <View style={styles.currentWeatherContainer}>
           <CurrentWeather data={this.state.currentWeather} />
         </View>
         <View style={styles.hourlyWeatherContainer}>
-          <HourlyForecast data={hourlyForecastData} />
+          <HourlyForecast data={this.state.hourlyWeather} />
         </View>
         <View style={styles.chanceOfRainContainer}>
           <ChanceOfRain data={rainData} />

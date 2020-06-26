@@ -13,9 +13,9 @@ export default class Storage {
     this.defaultExpirationMinutes = defaultExpirationMinutes;
   }
 
-  async setCurrent(data: any) {
+  async setCurrent(key: string, data: any) {
     try {
-      await this.set(Storage.KEY_CURRENT, data);
+      await this.set(key, data);
     } catch (error) {
       throw error;
     }
