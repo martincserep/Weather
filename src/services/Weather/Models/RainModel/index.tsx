@@ -1,9 +1,7 @@
 export class RainModel {
-    hour: number;
+	hour: number;
 
-    constructor(hour: number) {
-        this.hour = hour;
-
-    }
-  }
-  
+	constructor(hour: number) {
+		this.hour = hour;
+	}
+}
