@@ -5,25 +5,22 @@ import Fontisto from "react-native-vector-icons/Fontisto";
 
 import Moment from "moment";
 import { IconModel } from "src/models/IconModel";
+import { HourItemModel } from '../../../models/HourItemModel/index';
 
 interface Props {
-	time: string;
-	icon: IconModel;
-	temperature: number;
-	temperatureUnit: string;
+	data: HourItemModel;
 }
 
-const HourItem = ({ time, icon, temperature, temperatureUnit }: Props) => {
+const HourItem = ({ data }: Props) => {
 	Moment.locale("hu");
 	let isActive = false;
-	let timeToCalculate = parseInt(Moment(time).format("hh"));
+	let timeToCalculate = parseInt(Moment(data.time).format("hh"));
 	let currentHour = Moment.now();
 	let currentDay = Moment(currentHour).format("MM-DD");
 	currentHour = parseInt(Moment(currentHour).format("hh"));
-	let displayDayRaw = Moment.utc(time);
+	let displayDayRaw = Moment.utc(data.time);
 	let displayDay = Moment(displayDayRaw).format("MM-DD");
-	let hourRaw = Moment.utc(time);
-
+	let hourRaw = Moment.utc(data.time);
 	if (
 		timeToCalculate <= currentHour &&
 		currentHour < timeToCalculate + 3 &&
@@ -49,12 +46,12 @@ const HourItem = ({ time, icon, temperature, temperatureUnit }: Props) => {
 			<View
 				style={isActive ? activeStyles.iconContainer : styles.iconContainer}
 			>
-				{icon === undefined ? (
+				{data.icon === undefined ? (
 					<Fontisto size={30} name={`sun`} color="#00a8cc" />
-				) : icon.isIcon ? (
-					<Icon size={30} name={`${icon.name}`} color="#00a8cc" />
+				) : data.icon.isIcon ? (
+					<Icon size={30} name={`${data.icon.name}`} color="#00a8cc" />
 				) : (
-					<Fontisto size={30} name={`${icon.name}`} color="#00a8cc" />
+					<Fontisto size={30} name={`${data.icon.name}`} color="#00a8cc" />
 				)}
 			</View>
 			<View
@@ -65,14 +62,14 @@ const HourItem = ({ time, icon, temperature, temperatureUnit }: Props) => {
 				}
 			>
 				<Text style={isActive ? activeStyles.temperature : styles.temperature}>
-					{temperature}
+					{data.temperature}
 				</Text>
 				<Text
 					style={
 						isActive ? activeStyles.temperatureUnit : styles.temperatureUnit
 					}
 				>
-					{temperatureUnit}
+					{data.temperatureUnit}
 				</Text>
 			</View>
 		</View>

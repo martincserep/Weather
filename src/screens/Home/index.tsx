@@ -57,7 +57,7 @@ export default class Home extends Component {
 		try {
 			await this.fetchPreviouslyStoredData();
 			this.setState({ cityRaw: this.state.city });
-			// this.fetchData();
+			this.fetchData();
 		} catch (error) {
 			Alert.alert(error.message);
 		}
@@ -93,7 +93,6 @@ export default class Home extends Component {
 				return data;
 			}
 			let hours = hourData.list.map((current) => {
-				// let icon:IconModel = WeatherConditionIcon.getForCode(current.weather[0].id, false)
 				return new HourItemModel(
 					current.dt_txt,
 					WeatherConditionIcon.getForCode(current.weather[0].id, false),
@@ -104,22 +103,17 @@ export default class Home extends Component {
 			this.setState({ temperatureUnit: unit });
 			this.setState({ hourlyWeather: hours });
 			this.updateStateWithWeatherData(data);
-			console.log(data);
+			this.updateStateWithHourlyWeatherData(hourData);
 		} catch (error) {
 			throw error;
 		}
 	}
 
 	updateStateWithWeatherData(data: CurrentModel) {
-		// console.error(data.weather[0].id)
 		const icon: IconModel = WeatherConditionIcon.getForCode(
 			data.weather[0].id,
 			false
 		);
-		// console.error(icon.isIcon)
-		// const icon = new IconModel(rawIcon.isIcon, rawIcon.name);
-		// const icon = new IconModel(false, 'sun');
-		// console.error(icon.name)
 		const newWeatherData = new Current(
 			parseFloat(data.main.temp.toFixed(1)),
 			"°C",
@@ -137,7 +131,7 @@ export default class Home extends Component {
 			let icon: IconModel = WeatherConditionIcon.getForCode(
 				current.weather[0].id,
 				false
-			);
+				);
 			return new HourItemModel(
 				current.dt_txt,
 				icon,
