@@ -16,6 +16,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#000839',
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   currentWeatherContainer: {
     height: '40%',
@@ -23,9 +25,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   hourlyWeatherContainer: {
-    height: '30%',
-  },
-  chanceOfRainContainer: {
-    height: '30%',
+    height: '40%',
   }
 });

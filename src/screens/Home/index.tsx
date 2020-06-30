@@ -7,8 +7,11 @@ import {
   StatusBar,
   ScrollView,
   Alert,
+  Modal,
+  TextInput,
+  TouchableOpacity,
+  Button,
 } from "react-native";
-import ChanceOfRain from "../../components/ChanceOfRain";
 import HourlyForecast from "../../components/HourlyForecast";
 import CurrentWeather from "../../components/CurrentWeather";
 import { Current } from "../../models/Current/index";
@@ -24,9 +27,11 @@ import WeatherConditionIcon from "../../services/Weather/WeatherConditionIcon";
 import WeatherConditionText from "../../services/Weather/WeatherConditionText";
 import { IconModel } from "../../models/IconModel/index";
 import { HourlyRootModel } from "src/services/Weather/HourlyRootModel";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default class Home extends Component {
   weather: any;
+  defaultIcon: IconModel = new IconModel(false, "sun");
 
   constructor(props: Readonly<{}>) {
     super(props);
@@ -35,12 +40,14 @@ export default class Home extends Component {
       currentWeather: Current,
       hourlyWeather: Array<HourItemModel>(),
       city: "Hajdúböszörmény",
+      cityRaw: "Hajdúböszörmény",
       countryCode: "Hu",
       temperature: 0,
       temperatureUnit: TemperatureUnit.CELCIUS,
       emoji: "⛅️",
       conditionName: "loading",
       locationFormModalVisibility: false,
+      modalVisible: false,
     };
 
     this.weather = new Weather({ apiKey: env.OPEN_WEATHER_API_KEY });
@@ -48,12 +55,42 @@ export default class Home extends Component {
 
   async componentDidMount() {
     const hourlyForecastData = [
-      new HourItemModel('2020-06-26 15:00:00', "night-alt-cloudy", 15, "°C"),
-      new HourItemModel('2020-06-26 18:00:00', "night-alt-cloudy", 15, "°C"),
-      new HourItemModel('2020-06-26 21:00:00', "night-alt-cloudy", 15, "°C"),
-      new HourItemModel('2020-06-27 00:00:00', "rain", 14, "°C"),
-      new HourItemModel('2020-06-27 03:00:00', "rain", 14, "°C"),
-      new HourItemModel('2020-06-27 06:00:00', "day-sunny", 15, "°C"),
+      new HourItemModel(
+        "2020-06-26 15:00:00",
+        new IconModel(false, "sun"),
+        15,
+        "°C"
+      ),
+      new HourItemModel(
+        "2020-06-26 18:00:00",
+        new IconModel(false, "sun"),
+        15,
+        "°C"
+      ),
+      new HourItemModel(
+        "2020-06-26 21:00:00",
+        new IconModel(false, "sun"),
+        15,
+        "°C"
+      ),
+      new HourItemModel(
+        "2020-06-27 00:00:00",
+        new IconModel(false, "sun"),
+        14,
+        "°C"
+      ),
+      new HourItemModel(
+        "2020-06-27 03:00:00",
+        new IconModel(false, "sun"),
+        14,
+        "°C"
+      ),
+      new HourItemModel(
+        "2020-06-27 06:00:00",
+        new IconModel(false, "sun"),
+        15,
+        "°C"
+      ),
     ];
     this.setState({
       currentWeather: new Current(
@@ -63,14 +100,13 @@ export default class Home extends Component {
         "Hu",
         21,
         1592764535,
-        new IconModel(false, "sun")
+        this.defaultIcon
       ),
       hourlyWeather: hourlyForecastData,
     });
     try {
       // await this.fetchPreviouslyStoredData();
       this.fetchData();
-
     } catch (error) {
       Alert.alert(error.message);
     }
@@ -91,29 +127,40 @@ export default class Home extends Component {
     updateState = true,
   } = {}) {
     try {
-      let data = await this.weather.getCurrent({ city, unit });
-      let hourData:HourlyRootModel = await this.weather.getHours({ city, unit })
+      let data: CurrentModel = await this.weather.getCurrent({ city, unit });
+      let hourData: HourlyRootModel = await this.weather.getHours({
+        city,
+        unit,
+      });
       if (!updateState) {
         return data;
       }
-      let hours = hourData.list.map(current => {
-        return new HourItemModel(current.dt_txt,'sun',parseFloat(current.main.temp.toFixed(0)),'°C')
-      })
+      let hours = hourData.list.map((current) => {
+        return new HourItemModel(
+          current.dt_txt,
+          WeatherConditionIcon.getForCode(current.weather[0].id, false),
+          parseFloat(current.main.temp.toFixed(0)),
+          "°C"
+        );
+      });
       this.setState({ temperatureUnit: unit });
-      this.setState({ hourlyWeather: hours})
+      this.setState({ hourlyWeather: hours });
       this.updateStateWithWeatherData(data);
+      console.log(data)
     } catch (error) {
       throw error;
     }
   }
 
   updateStateWithWeatherData(data: CurrentModel) {
-    const rawIcon: IconModel = WeatherConditionIcon.getForCode(
-      data.weather.id,
+    // console.error(data.weather[0].id)
+    const icon: IconModel = WeatherConditionIcon.getForCode(
+      data.weather[0].id,
       false
     );
+    // console.error(icon.isIcon)
     // const icon = new IconModel(rawIcon.isIcon, rawIcon.name);
-    const icon = new IconModel(false, 'sun');
+    // const icon = new IconModel(false, 'sun');
     // console.error(icon.name)
     const newWeatherData = new Current(
       parseFloat(data.main.temp.toFixed(1)),
@@ -145,6 +192,19 @@ export default class Home extends Component {
     }
   }
 
+  refreshWeatherData() {
+    let oldCity = this.state.cityRaw;
+    this.setState({city: oldCity})
+    try {
+      this.fetchData();
+    } catch (error) {
+      Alert.alert(error.message);
+    }
+    console.log(this.state.city)
+    console.log(oldCity)
+    this.setState({modalVisible: false})
+  }
+
   render() {
     const rainData = [
       new RainItemModel(false, 30, 2),
@@ -154,17 +214,44 @@ export default class Home extends Component {
       new RainItemModel(false, 100, 10),
       new RainItemModel(false, 20, 12),
     ];
-    
     return (
       <View style={styles.container}>
+        <Modal
+        animationType="slide"
+        animated={true}
+        visible={this.state.modalVisible}
+        transparent={true}>
+        <View style={styles.modalView}>
+          <TouchableOpacity style={styles.modalClose} onPress={() => this.setState({modalVisible: false})}>
+            <Ionicons name={'ios-close-circle-outline'} size={25} color={'#fefefe'}/>
+          </TouchableOpacity>
+          <Text
+          style={{fontSize:25, color: '#fefefe'}}
+          >Type the location...</Text>
+          <TextInput
+        style={{height: 40, borderColor: 'gray', borderWidth: 1, color: '#fefefe'}}
+        value={this.state.cityRaw}
+        onChangeText={(text) => this.setState({cityRaw: text})}
+      />
+      <Button
+      onPress={() => {this.refreshWeatherData()}}
+      title={'Done'}
+      color="#fefefe">
+      </Button>
+        </View>
+
+        </Modal>
+        <View style={styles.locationContainer}>
+        <TouchableOpacity style={styles.locationChooser} onPress={() => this.setState({modalVisible: true})}>
+          <Ionicons name={'ios-pin'} size={25} color={'#fefefe'}/>
+          <Text style={{fontSize:25, color: '#fefefe', marginLeft: 10}}>{this.state.city}</Text>
+        </TouchableOpacity>
+        </View>
         <View style={styles.currentWeatherContainer}>
           <CurrentWeather data={this.state.currentWeather} />
         </View>
         <View style={styles.hourlyWeatherContainer}>
           <HourlyForecast data={this.state.hourlyWeather} />
-        </View>
-        <View style={styles.chanceOfRainContainer}>
-          <ChanceOfRain data={rainData} />
         </View>
       </View>
     );
@@ -175,6 +262,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: "#000839",
+    justifyContent: 'center',
   },
   currentWeatherContainer: {
     height: "40%",
@@ -182,9 +270,37 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   hourlyWeatherContainer: {
-    height: "30%",
+    height: "40%",
   },
-  chanceOfRainContainer: {
-    height: "30%",
+  locationContainer: {
+    height: "10%",
+    flexDirection: 'column'
   },
+  modalView: {
+    // alignContent: 'center',
+    alignSelf: 'center',
+    justifyContent: "center",
+    marginTop: '70%',
+    height: "20%",
+    width: "100%",
+    backgroundColor: "#111d5e",
+    color: '#fefefe',
+  },
+  modalClose: {
+    alignSelf: 'flex-end',
+    marginRight: '10%'
+
+  },
+  locationChooser: {
+    borderWidth: 2,
+    borderColor: '#fefefe',
+    width: '70%',
+    padding: 5,
+    alignContent: 'space-around',
+    alignSelf: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    flexDirection: 'row'
+  }
 });

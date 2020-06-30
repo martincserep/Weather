@@ -5,6 +5,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import { Current } from '../../models/Current';
 import Moment from 'moment';
 
+
 interface Props {
     data: Current,
 }
@@ -13,16 +14,16 @@ const CurrentWeather = ({ data }: Props) => {
   const currentDate = Moment.now();
   const sunsetRaw = Moment.unix(data.sunset);
   const sunset = Moment(sunsetRaw).format('HH:mm');
-
   return (
     <View style={styles.container}>
       <View style={styles.dayContainer}>
         <View style={styles.iconContainer}>
-{/*     
-          {data.icon.isIcon ?
+    
+          {/* {data.icon.isIcon ?
           <Icon style={styles.icon} size={50} name={`${data.icon.name}`} color="#00a8cc" />
-        : <Fontisto style={styles.icon} size={50} name={`${data.icon.name}`} color="#00a8cc" /> }
-          */}
+        : <Fontisto style={styles.icon} size={50} name={`${data.icon.name}`} color="#00a8cc" />
+        } */}
+         
           
         </View>
         <View style={styles.dayTextContainer}>

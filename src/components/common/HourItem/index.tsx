@@ -1,17 +1,19 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import Icon from 'react-native-vector-icons/Fontisto';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 
 import Moment from 'moment'
+import { IconModel } from 'src/models/IconModel';
 
 interface Props {
     time: string,
-    weather: string,
+    icon: IconModel,
     temperature: number,
     temperatureUnit: string,
 }
 
-const HourItem = ({ time, weather, temperature, temperatureUnit }: Props) => {
+const HourItem = ({ time, icon, temperature, temperatureUnit }: Props) => {
   Moment.locale('hu')
   let isActive = false;
   let timeToCalculate = parseInt(Moment(time).format('hh'))
@@ -28,11 +30,11 @@ const HourItem = ({ time, weather, temperature, temperatureUnit }: Props) => {
   } else {
     isActive = false;
   }
-    
+    // console.error(icon)
   return (
     <View style={isActive ? activeStyles.container : styles.container}>
       <View style={isActive ? activeStyles.hourContainer : styles.hourContainer}>
-        <Text style={isActive ? activeStyles.hour : styles.hour}>
+        <Text style={isActive ? activeStyles.day : styles.day}>
             {Moment(displayDayRaw).format('ddd, DD')}
           </Text>
           <Text style={isActive ? activeStyles.hour : styles.hour}>
@@ -40,7 +42,11 @@ const HourItem = ({ time, weather, temperature, temperatureUnit }: Props) => {
           </Text>
       </View>
       <View style={isActive ? activeStyles.iconContainer : styles.iconContainer}>
-        <Icon name={`${weather}`} size={25} color="#fefefe" />
+      {/* {icon.isIcon ?
+          <Icon size={25} name={`${icon.name}`} color="#00a8cc" />
+        : <Fontisto size={25} name={`${icon.name}`} color="#00a8cc" />
+        }
+          */}
       </View>
       <View style={isActive ? activeStyles.temperatureContainer : styles.temperatureContainer}>
           <Text style={isActive ? activeStyles.temperature : styles.temperature}>
@@ -64,10 +70,10 @@ const styles = StyleSheet.create({
     color: '#fefefe',
     borderColor: '#fefefe',
     borderWidth: 0.5,
-    borderRadius: 1000,
+    borderRadius: 70,
     marginHorizontal: 5,
     height: '85%',
-    minWidth: 50,
+    minWidth: 70,
     width: 'auto',
     backgroundColor: '#00005c',
     paddingHorizontal: 10,
@@ -87,6 +93,11 @@ const styles = StyleSheet.create({
   hour: {
     color: '#fefefe',
     fontWeight: '300'
+  },
+  day: {
+    color: '#fefefe',
+    fontWeight: '400',
+    fontSize: 10,
   },
   iconContainer: {
     height: 50,

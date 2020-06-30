@@ -3,7 +3,6 @@ import { IconModel } from '../../models/IconModel/index';
 
 export default class WeatherConditionIcon {
   static getForCode(code: number, isAtNight = false) {
-    // console.error('lofast')
     switch (code) {
       // Thunderstorm
       case WeatherConditionCode.THUNDERSTORM_AND_RAIN_LIGHT:

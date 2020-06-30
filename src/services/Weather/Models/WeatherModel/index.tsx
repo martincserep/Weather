@@ -3,11 +3,11 @@ export class WeatherModel {
     main: string;
     desc: string;
     icon: string;
-    constructor(id: number, main: string, desc: string, icon: string) {
-        this.id = id;
-        this.main = main;
-        this.desc = desc;
-        this.icon = icon;
+    constructor(response:any) {
+        this.id = response.id;
+        this.main = response.main;
+        this.desc = response.desc;
+        this.icon = response.icon;
     }
   }
   
