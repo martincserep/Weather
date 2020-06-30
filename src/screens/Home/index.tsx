@@ -174,34 +174,16 @@ export default class Home extends Component {
     // console.error(newWeatherData)
     this.setState({ currentWeather: newWeatherData });
   }
-
-  handlePressLocation() {
-    this.setState({ locationFormModalVisibility: true });
-  }
-
-  handlePressLocationFormModalCancel() {
-    this.setState({ locationFormModalVisibility: false });
-  }
-
-  async handleSubmitEditingLocationFromModal(city: any) {
-    try {
-      await this.fetchData({ city });
-      this.setState({ locationFormModalVisibility: false });
-    } catch (error) {
-      Alert.alert(error.message);
-    }
-  }
-
+ 
   refreshWeatherData() {
-    let oldCity = this.state.cityRaw;
+    let newCity = this.state.cityRaw;
+    let city = this.state.city;
     this.setState({city: oldCity})
     try {
-      this.fetchData();
+      this.fetchData({ city:newCity });
     } catch (error) {
       Alert.alert(error.message);
     }
-    console.log(this.state.city)
-    console.log(oldCity)
     this.setState({modalVisible: false})
   }
 
